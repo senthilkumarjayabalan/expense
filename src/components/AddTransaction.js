@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { TransactionContext } from '../contexts/transactionContext';
+import axios from 'axios';
 
 export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
-  const [transactionList, setTransactionList] = useContext(TransactionContext);
+  const [, setTransactionList] = useContext(TransactionContext);
 
   const textHandler = (e) => {
     setText(e.target.value);
@@ -14,12 +15,15 @@ export const AddTransaction = () => {
     setAmount(e.target.value);
   };
 
-  const addTransactionHandler = (e) => {
+  const addTransactionHandler = async (e) => {
     e.preventDefault();
-    setTransactionList([
-      ...transactionList,
-      { text: text, amount: parseInt(amount) },
-    ]);
+    await axios.post('http://localhost:8080/api/v1/expense', {
+      id: Math.floor(Math.random() * 100000) + 1,
+      text: text,
+      amount: parseInt(amount),
+    });
+    const response = await axios.get('http://localhost:8080/api/v1/expense');
+    setTransactionList(response.data);
     setText('');
     setAmount('');
   };

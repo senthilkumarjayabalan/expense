@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
-import { TransactionContext } from '../contexts/transactionContext';
+import { TransactionContext } from '../../contexts/transactionContext';
 
 export const IncomeExpenses = () => {
-  const [transactionList] = useContext(TransactionContext);
+  const [state] = useContext(TransactionContext);
 
-  const income = transactionList.reduce(
+  const income = state.transaction.reduce(
     (a, b) => a + (b.amount > 0 ? b.amount : 0),
     0
   );
-  const expense = transactionList.reduce(
+  const expense = state.transaction.reduce(
     (a, b) => a + (b.amount < 0 ? b.amount : 0),
     0
   );

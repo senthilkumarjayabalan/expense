@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
-import { TransactionContext } from '../contexts/transactionContext';
+import { TransactionContext } from '../../contexts/transactionContext';
 import axios from 'axios';
 
 export const TransactionList = () => {
-  const [transactionList, setTransactionList] = useContext(TransactionContext);
+  const [state, setState] = useContext(TransactionContext);
 
   const deleteTransaction = (id) => {
     return async () => {
       await axios.delete('http://localhost:8080/api/v1/expense/' + id);
       const response = await axios.get('http://localhost:8080/api/v1/expense');
-      setTransactionList(response.data);
+      setState((prevState) => ({ ...prevState, transaction: response.data }));
     };
   };
 
@@ -17,7 +17,7 @@ export const TransactionList = () => {
     <>
       <h3>History</h3>
       <ul className='list'>
-        {transactionList.map((trx) => (
+        {state.transaction.map((trx) => (
           <li className={trx.amount > 0 ? 'plus' : 'minus'} key={trx.id}>
             {trx.text}{' '}
             <span>

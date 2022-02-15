@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { TransactionContext } from '../contexts/transactionContext';
+import { TransactionContext } from '../../contexts/transactionContext';
 import axios from 'axios';
 
 export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
-  const [, setTransactionList] = useContext(TransactionContext);
+  const [, setState] = useContext(TransactionContext);
 
   const textHandler = (e) => {
     setText(e.target.value);
@@ -23,7 +23,7 @@ export const AddTransaction = () => {
       amount: parseInt(amount),
     });
     const response = await axios.get('http://localhost:8080/api/v1/expense');
-    setTransactionList(response.data);
+    setState((prevState) => ({ ...prevState, transaction: response.data }));
     setText('');
     setAmount('');
   };

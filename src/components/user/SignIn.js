@@ -1,12 +1,17 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
+import { TransactionContext } from '../../contexts/transactionContext';
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [, setState] = useContext(TransactionContext);
 
   const signInHandler = async (e) => {
+    setError('');
+    setSuccess('');
     e.preventDefault();
 
     try {
@@ -17,12 +22,23 @@ export const SignIn = () => {
           password,
         }
       );
-      if (response.data && response.data.password === password) {
-        console.log('Logged in sucsesfully');
+      console.log(response.data);
+      console.log(response.headers);
+      if (response.data) {
+        console.log('trueee');
+        setState((prevState) => ({
+          ...prevState,
+          user: {
+            email: response.data.email,
+            token: response.headers.authorization,
+          },
+        }));
+        setSuccess('Logged in Successfully');
         setEmail('');
         setPassword('');
       }
     } catch (err) {
+      console.log(err);
       setError('Invalid User');
     }
   };
@@ -32,9 +48,11 @@ export const SignIn = () => {
       <Card.Body>
         <Form>
           {error && <div className='text-danger error-text'>{error}</div>}
+          {success && <div className='text-danger error-text'>{success}</div>}
           <Form.Group className='mb-3' controlId='formBasicEmail'>
             <Form.Label>Email address</Form.Label>
             <Form.Control
+              value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -46,6 +64,7 @@ export const SignIn = () => {
           <Form.Group className='mb-3' controlId='formBasicPassword'>
             <Form.Label>Password</Form.Label>
             <Form.Control
+              value={password}
               type='password'
               onChange={(e) => {
                 setPassword(e.target.value);

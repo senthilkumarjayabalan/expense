@@ -7,8 +7,12 @@ export const TransactionList = () => {
 
   const deleteTransaction = (id) => {
     return async () => {
-      await axios.delete('http://localhost:8080/api/v1/expense/' + id);
-      const response = await axios.get('http://localhost:8080/api/v1/expense');
+      await axios.delete(`http://localhost:8080/api/v1/expense/${id}`, {
+        headers: { Authorization: `Bearer ${state.user.token}` },
+      });
+      const response = await axios.get('http://localhost:8080/api/v1/expense', {
+        headers: { Authorization: `Bearer ${state.user.token}` },
+      });
       setState((prevState) => ({ ...prevState, transaction: response.data }));
     };
   };

@@ -5,7 +5,7 @@ import axios from 'axios';
 export const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
-  const [, setState] = useContext(TransactionContext);
+  const [state, setState] = useContext(TransactionContext);
 
   const textHandler = (e) => {
     setText(e.target.value);
@@ -17,12 +17,18 @@ export const AddTransaction = () => {
 
   const addTransactionHandler = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:8080/api/v1/expense', {
-      id: Math.floor(Math.random() * 100000) + 1,
-      text: text,
-      amount: parseInt(amount),
+    await axios.post(
+      'http://localhost:8080/api/v1/expense',
+      {
+        id: Math.floor(Math.random() * 100000) + 1,
+        text: text,
+        amount: parseInt(amount),
+      },
+      { headers: { Authorization: `Bearer ${state.user.token}` } }
+    );
+    const response = await axios.get('http://localhost:8080/api/v1/expense', {
+      headers: { Authorization: `Bearer ${state.user.token}` },
     });
-    const response = await axios.get('http://localhost:8080/api/v1/expense');
     setState((prevState) => ({ ...prevState, transaction: response.data }));
     setText('');
     setAmount('');

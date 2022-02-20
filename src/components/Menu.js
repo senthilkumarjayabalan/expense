@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { TransactionContext } from '../contexts/transactionContext';
 
 export const Menu = () => {
+  const [state] = useContext(TransactionContext);
   return (
     <Navbar bg='dark' variant='dark'>
       <Container>
@@ -16,7 +18,11 @@ export const Menu = () => {
           </LinkContainer>
 
           <LinkContainer to='signup'>
-            <Nav.Link>SignUp</Nav.Link>
+            <Nav.Link>
+              {state.user.email
+                ? state.user.email.replace('@gmail.com', '')
+                : 'sign up'}
+            </Nav.Link>
           </LinkContainer>
         </Nav>
       </Container>

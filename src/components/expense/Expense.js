@@ -1,5 +1,4 @@
 import React from 'react';
-import { TransactionProvider } from '../../contexts/transactionContext';
 import { AddTransaction } from './AddTransaction';
 import { Balance } from './Balance';
 import { Header } from './Header';
@@ -8,7 +7,7 @@ import { TransactionList } from './TransactionList';
 
 export const Expense = () => {
   return (
-    <TransactionProvider>
+    <>
       <Header />
       <div className='container'>
         <Balance />
@@ -16,6 +15,6 @@ export const Expense = () => {
         <TransactionList />
         <AddTransaction />
       </div>
-    </TransactionProvider>
+    </>
   );
 };

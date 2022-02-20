@@ -7,14 +7,21 @@ export const TransactionProvider = ({ children }) => {
   const [state, setState] = useState({ user: {}, transaction: [] });
 
   useEffect(() => {
-    console.log('use Effect called ');
-    const getTransactions = async () => {
-      const response = await axios.get('http://localhost:8080/api/v1/expense');
+    console.log('Transaction Context use Effect called ... ');
+    if (state.user.token) {
+      const getTransactions = async () => {
+        const response = await axios.get(
+          'http://localhost:8080/api/v1/expense',
+          {
+            headers: { Authorization: `Bearer ${state.user.token}` },
+          }
+        );
 
-      setState((prevState) => ({ ...prevState, transaction: response.data }));
-    };
-    getTransactions();
-  }, []);
+        setState((prevState) => ({ ...prevState, transaction: response.data }));
+      };
+      getTransactions();
+    }
+  }, [state.user.token]);
 
   return (
     <TransactionContext.Provider value={[state, setState]}>

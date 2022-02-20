@@ -6,10 +6,11 @@ import { Expense } from './components/expense/Expense';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import SignUp from './components/user/SignUp';
 import { SignIn } from './components/user/SignIn';
+import { TransactionProvider } from './contexts/transactionContext';
 
 function App() {
   return (
-    <>
+    <TransactionProvider>
       <BrowserRouter>
         <Menu />
         <Routes>
@@ -20,7 +21,7 @@ function App() {
           <Route path='/expense' element={<Expense />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </TransactionProvider>
   );
 }
 
